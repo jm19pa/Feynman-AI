@@ -7,13 +7,27 @@
     <title>Create Account</title>
 </head>
 <body>
-    <h1>REGISTER PAGE</h1>
-    <input type="text" placeholder="Username" id="userRegister">
-    <input type="text" placeholder="Email" id="emailRegister">
-    <input type="text" placeholder="Password" id="passRegister">
-    <input type="text" placeholder="Verify Password" id="verifyPassRegister">
-    <button onclick="doRegister()">Send</button>
-    <p>CHANGE PASSWORD TYPE TO PASSWORD BEFORE SUBMISSION</p>
+    <div id="navBar">
+        <ul>
+            <li><a class="fainman" href="index.html">fAInman</a></li>
+        </ul>
+    </div>
+
+    <div class="boxCenter">
+        <h1>Create an Account</h1>
+        <ul>
+            <li class="inputs"><input type="text" placeholder="Username" id="userRegister"></li>
+            <li class="inputs"><input type="text" placeholder="Email" id="emailRegister"></li>
+            <li class="inputs"><input type="text" placeholder="Password" id="passRegister"></li>
+            <li class="inputs"><input type="text" placeholder="Verify Password" id="verifyPassRegister"></li>
+        </ul>
+
+        <button onclick="doRegister()">Create Account</button>
+    </div>
+
+    <!-- <h1>REGISTER PAGE</h1> -->
+    
+    <!-- <p>CHANGE PASSWORD TYPE TO PASSWORD BEFORE SUBMISSION</p> -->
     <script src="js/script.js"></script>
 </body>
 </html>
