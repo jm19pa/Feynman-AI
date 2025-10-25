@@ -1,21 +1,25 @@
-import os
-from dotenv import load_dotenv
 import mysql.connector
 from mysql.connector import Error
+from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_NAME = os.getenv("DB_NAME")
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-
-def _require_credentials():
-    if not all([DB_HOST, DB_NAME, DB_USER, DB_PASSWORD]):
-        raise RuntimeError(
-            "Database credentials not fully set. "
-            "Check DB_HOST, DB_NAME, DB_USER, DB_PASSWORD environment variables."
+def connect_to_database():
+    try:
+        conn = mysql.connector.connect(
+            host=os.getenv("DB_HOST"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            database=os.getenv("DB_NAME")
         )
+        if conn.is_connected():
+            print("✅ Connected to database")
+            return conn
+    except Error as e:
+        print(f" Error connecting to database: {e}")
+        return None
+
 
 def get_db_connection():
     try:
