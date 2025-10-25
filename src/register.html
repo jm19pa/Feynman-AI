@@ -14,7 +14,7 @@
     </div>
 
     <div class="boxCenter">
-        <h1>Create an Account</h1>
+        <h1 id="createHead">Create an account</h1>
         <ul>
             <li class="inputs"><input type="text" placeholder="Username" id="userRegister"></li>
             <li class="inputs"><input type="text" placeholder="Email" id="emailRegister"></li>
@@ -22,7 +22,8 @@
             <li class="inputs"><input type="text" placeholder="Verify Password" id="verifyPassRegister"></li>
         </ul>
 
-        <button onclick="doRegister()">Create Account</button>
+        <button id="createBtn" onclick="doRegister()">Create Account</button>
+        <p id="bottomText">Have an account? <a id="bottomLink" href="login.html">Log in here</a></p>
     </div>
 
     <!-- <h1>REGISTER PAGE</h1> -->
