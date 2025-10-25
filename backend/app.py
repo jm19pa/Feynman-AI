@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from werkzeug.security import generate_password_hash
 from flask_cors import CORS
+from db import query, execute
 import google.generativeai as genai
 import base64
 
