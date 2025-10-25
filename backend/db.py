@@ -3,7 +3,8 @@ from mysql.connector import Error
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+load_dotenv("/etc/env")
+
 '''print("=== ENV DEBUG ===")
 print("DB_HOST:", os.getenv("DB_HOST"))
 print("DB_USER:", os.getenv("DB_USER"))
