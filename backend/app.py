@@ -4,6 +4,7 @@ from flask_cors import CORS
 from db import query, execute
 import google.generativeai as genai
 import base64
+from pathlib import Path
 
 ### initializations ###
 
@@ -52,25 +53,58 @@ def register():
 @app.route("/test", methods=["GET"])
 def test():
 
-    user_string = ""
+    # understanding: 1 -> 4
+    # context: general, exam, work
+
+    conceptMain = "HTML"
+    subCategories = ["Elements", "Attributes", "Comments", "Clean Code"]
+    knowledgeLevel = "1"
+    context = "School"
+
+    subCategories = ", ".join(subCategories)
+
+    inputtedFields = []
+
+    inputtedFields.append(conceptMain)
+    inputtedFields.append(subCategories)
+    inputtedFields.append(knowledgeLevel)
+    inputtedFields.append(context)
+
+    print(inputtedFields)
 
     model = genai.GenerativeModel("gemini-2.5-flash")
 
     chat = model.start_chat()
 
-    prompt = "What are some good energy drinks to try?"
+    prompt = ""
 
+    localPath = f"{Path.cwd()}\\backend\\prompt.txt"
+    serverPath = ""
 
-    while user_string != "null":
+    # we do this to create unique prompts for each instance
+    replaceKeywords = ["{inputtedConceptMain}", 
+                       "{inputtedConcepts}", 
+                       "{inputtedKnowledgeLevel}", 
+                       "{inputtedContext}"]
 
-        response = chat.send_message(prompt)
+    try:
+        with open(file=localPath, mode='r') as promptFile:
+            prompt = promptFile.read()
+            for i, keyword in enumerate(replaceKeywords):
+                prompt = prompt.replace(keyword, inputtedFields[i])
+    except FileNotFoundError:
+        print("Prompt file was not found")
+        return
+
+    while prompt != "null":
+
+        response = chat.send_message(prompt, stream=True)
 
         for chunk in response:
             print(chunk.text, end="", flush=True)
         
-        print("Chat:", end="")
+        print("\nChat: ", end="")
         prompt = input()
-    
 
     return
 
@@ -115,6 +149,7 @@ def submit():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    # app.run(host="0.0.0.0", port=5000)
 
-    # test()
+    # used for testing
+    test()
