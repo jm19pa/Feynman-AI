@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from google import genai
+import google.generativeai as genai
 import base64
 
 # Initialize Flask
