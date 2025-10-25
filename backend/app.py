@@ -3,36 +3,37 @@ from flask_cors import CORS
 import google.generativeai as genai
 import base64
 
-# Initialize Flask
+# --- Flask setup ---
 app = Flask(__name__)
-CORS(app)  # Allow cross-origin requests (for your frontend)
+CORS(app)
 
-# Initialize Gemini client
-client = genai.Client()
+# --- Gemini setup ---
+genai.configure()
 
-# --- Root Route ---
+# --- Routes ---
+
 @app.route("/")
 def home():
-    """
-    Simple test route — confirms the backend is alive
-    """
     return jsonify({"message": "Welcome to the Feynman AI Flask API!"})
 
-# --- Test Route (Your Red Bull Example) ---
 @app.route("/test", methods=["GET"])
 def test():
+    """
+    Basic Gemini test: ask for Red Bull flavors.
+    """
     try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents="Provide a list of the most popular RedBull drink flavors."
-        )
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        response = model.generate_content("Provide a list of the most popular Red Bull drink flavors.")
         return jsonify({"ai_response": response.text})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# --- Core Route: Handle student explanation + image ---
 @app.route("/submit", methods=["POST"])
 def submit():
+    """
+    Accepts JSON with text + base64 image, sends to Gemini,
+    returns the AI's guiding questions.
+    """
     data = request.get_json()
     text = data.get("text")
     image = data.get("image")
@@ -45,20 +46,16 @@ def submit():
     except Exception:
         return jsonify({"error": "Invalid image data"}), 400
 
-    prompt = f"The student explained: '{text}'. Ask open-ended questions that guide them to clarify or deepen their understanding (Feynman technique style)."
+    prompt = f"The student explained: '{text}'. Ask thoughtful, guiding questions in the Feynman learning style."
 
     try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=[
-                {"mime_type": "image/png", "data": image_bytes},
-                prompt
-            ]
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        response = model.generate_content(
+            [prompt, {"mime_type": "image/png", "data": image_bytes}]
         )
         return jsonify({"ai_response": response.text})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# --- Run Flask ---
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
