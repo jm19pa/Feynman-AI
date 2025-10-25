@@ -22,7 +22,7 @@ def test():
     Basic Gemini test: ask for Red Bull flavors.
     """
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-2.5-flash")
         response = model.generate_content("Provide a list of the most popular Red Bull drink flavors.")
         return jsonify({"ai_response": response.text})
     except Exception as e:
