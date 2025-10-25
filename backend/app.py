@@ -22,8 +22,12 @@ def home():
     return jsonify({"message": "Welcome to the Feynman AI Flask API!"})
 
 #register
-@app.route("/register", methods=["POST"])
+@app.route("/register", methods=["POST", "GET"])
 def register():
+
+    if request.method == "GET":
+        return jsonify({"message": "Send a POST request with username, email, and password to register."})
+    
     data = request.get_json()
     username = data.get("username")
     password = data.get("password")
