@@ -23,13 +23,27 @@ def home():
 @app.route("/test", methods=["GET"])
 def test():
 
-    # trying out the gemini model call
-    try:
-        model = genai.GenerativeModel("gemini-2.5-flash")
-        response = model.generate_content("Provide a list of the most popular Red Bull drink flavors.")
-        return jsonify({"ai_response": response.text})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    user_string = ""
+
+    model = genai.GenerativeModel("gemini-2.5-flash")
+
+    chat = model.start_chat()
+
+    prompt = "What are some good energy drinks to try?"
+
+
+    while user_string != "null":
+
+        response = chat.send_message(prompt)
+
+        for chunk in response:
+            print(chunk.text, end="", flush=True)
+        
+        print("Chat:", end="")
+        prompt = input()
+    
+
+    return
 
 # text + image submitting
 @app.route("/submit", methods=["POST"])
@@ -53,6 +67,16 @@ def submit():
 
     # calling gemini
     try:
+        # notes for implementation:
+            # call model.generate_content_stream to send everything in chunks instead of a singular block (UX)
+        '''
+        JSON should be structured like:
+        [
+            {"role": "user", "parts": [{"text": "What are the top 5 RedBull flavors?", "image": null}]}
+            {"role": "model", "parts": [{"text": "idk buddy lol", "image": smelly.png}]}
+        ]        
+        '''
+
         model = genai.GenerativeModel("gemini-2.5-flash")
         response = model.generate_content(
             [prompt, {"mime_type": "image/png", "data": image_bytes}]
@@ -63,3 +87,5 @@ def submit():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
+    # test()
