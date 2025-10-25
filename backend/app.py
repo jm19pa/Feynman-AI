@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from werkzeug.security import generate_password_hash
 from flask_cors import CORS
 import google.generativeai as genai
 import base64
@@ -18,6 +19,33 @@ genai.configure()
 @app.route("/")
 def home():
     return jsonify({"message": "Welcome to the Feynman AI Flask API!"})
+
+#register
+@app.route("/register", methods=["POST"])
+def register():
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
+    email =data.get("email")
+
+    if not username or not email or not password:
+        return jsonify({"error": "Username, email, and password are required"}), 400
+    
+    if "@" not in email or "." not in email:
+        return jsonify({"error": "Invalid email address"}), 400
+    
+    hashed_password = generate_password_hash(password)
+
+    try:
+        execute(
+            "INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
+            (username, email, hashed_password)
+        )
+        return jsonify({"message": "User registered successfully"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+  
 
 # testing gemini api
 @app.route("/test", methods=["GET"])
