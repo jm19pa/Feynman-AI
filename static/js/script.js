@@ -14,7 +14,7 @@ async function doLogin() {
   }
 
   try {
-            const response = await fetch("/login", {
+    const response = await fetch("/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password })
@@ -60,7 +60,7 @@ async function doRegister() {
   }
 
   try {
-        const response = await fetch("/register", {
+    const response = await fetch("/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, email, password })
@@ -80,8 +80,34 @@ async function doRegister() {
   }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  const chatLog = document.getElementById("chatLog");
+  const inputText = document.getElementById("textBox");
+  const sendButton = document.getElementById("send");
 
-function checkPassword(){
+  // need to store these in localStorage
+  let currentSessionID = null;
+  let currentUserID = null;
+
+  async function sendMessage() {
+    const inputTextValue = inputText.value.trim();
+
+    if (inputText === '') return;
+
+    if (!currentSessionID){
+      window.alert("Invalid session ID, start a new chat");
+      return;
+    }
+
+    inputText.value = '';
+
+  }
+
+});
+
+
+
+function checkPassword() {
   const passElem = document.getElementById("passRegister");
   const verifyElem = verifyPassText || document.getElementById("verifyPassRegister");
 
@@ -93,12 +119,12 @@ function checkPassword(){
 
   const passwordText = passElem.value || "";
 
-  if (passwordText.length < 8 || passwordText.length > 20){
+  if (passwordText.length < 8 || passwordText.length > 20) {
     window.alert("Password must be between 8 - 20 characters"); // temp so we can do DOM later
     return false;
   }
 
-  if (passwordText !== verifyElem.value){
+  if (passwordText !== verifyElem.value) {
     console.log("Make sure passwords are equal"); // not an alert for ease-of-use
     return false;
   }

@@ -12,19 +12,19 @@
     <div id="container"> <!-- container to store chatbox & drawing area -->
         <div id="chatPanel"> <!-- the chat panel -->
             <div id="chatHead"> <!-- chatbox header -->
-                <span>Chatbox Header</span>
+                <span id="chatHeadText">Chatbox</span>
             </div>
             <div id="chatLog"> <!-- chat log -->
-                <!-- <p>Will get populated with data</p>
-                <p>USER MESSAGE</p>
-                <p>MODEL MESSAGE</p> -->
+                <p class="user">USER MESSAGE WHAT IF WE GET A SUPER LONG MESSAGE LIKE THIS ONE</p>
+                <p class="model">MODEL MESSAGE</p>
             </div>
             <div id="inputArea"> <!-- text input area -->
-                <input type="text" placeholder="Type a message">
+                <input type="text" id="textBox" placeholder="Type a message">
                 <button id="send"> <!-- send button -->
                     <span>&#10148</span> <!-- icon for send button -->
                 </button>
             </div>
+
         </div>
 
         <div id="drawingBoard"> <!-- drawing box -->
