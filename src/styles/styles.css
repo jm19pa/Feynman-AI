@@ -187,3 +187,25 @@ input:focus {
 
 
 /* chat window */
+table {
+    padding: 25px;
+    margin: auto;
+}
+
+#chat {
+    background-color: #282828;
+    border-radius: 15px;
+    width: 1500px;
+    height: 620px;
+}
+
+#emptySpace {
+    background-color: black;
+    width: 150px;
+}
+
+#drawingBoard {    
+    background-color: #282828;
+    border-radius: 15px;
+    width: 75%;
+}
