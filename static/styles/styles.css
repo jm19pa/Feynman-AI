@@ -256,7 +256,7 @@ li a:hover {
     transition: 0.3s ease-in;
 }
 
-/* register page*/
+/* register/login page*/
 #createHead {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     text-align: center;
@@ -264,11 +264,18 @@ li a:hover {
     animation: 1.5s fadeIn;
 }
 
+#loginHead {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-align: center;
+    padding-top: 80px;
+    animation: 1.5s fadeIn;
+}
+
 .boxCenter {
     background-color: #282828;
     border-radius: 15px;
     width: 40%;
-    height: 460px;
+    height: 470px;
     margin: 0 auto;
     display: block;
     animation: 1.5s fadeIn;
@@ -339,8 +346,14 @@ input:focus {
 /* about page */
 #about {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    padding: 20px;
-    margin: 0 auto;
+    width: 600px;
+    margin-top: 7%;
+    margin-left: 30%;
+    animation: 1.5s fadeIn;
+}
+
+#about p, #about li {
+    font-size: 25px;
 }
 
 /* selection page */
