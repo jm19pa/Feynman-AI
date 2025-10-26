@@ -141,7 +141,7 @@ def login():
             return jsonify({"error": "Invalid username or password"}), 401
 
         user_data = user[0]
-        return jsonify({"message": "Login successful", "id": user_data["id"], "username": user_data["username"]}), 200
+        return jsonify({"message": "Login successful", "user_id": user_data["id"], "username": user_data["username"]}), 200
     except Exception as e:
         app.logger.error(f"LOGIN FAILED: {e}")
         return jsonify({"error": str(e)}), 500  
