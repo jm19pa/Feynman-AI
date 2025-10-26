@@ -4,6 +4,17 @@ body {
     overflow-y: hidden;
 }
 
+@keyframes fadeIn {
+    0% {
+        transform: translateY(3%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}
+
 /* animated background */
 .background {
     width: 100%;
@@ -20,6 +31,7 @@ body {
     overflow: visible;
     z-index: -1;
     filter: blur(8px);
+    animation: 3s fadeIn;
 }
 
 .squares li {
@@ -142,6 +154,7 @@ body {
     padding-left: 20px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     transition: color 0.2s ease-in;
+    animation: 1.5s fadeIn;
 }
 
 .fainman:hover {
@@ -162,10 +175,12 @@ ul {
     margin-top: 20px;
     overflow: hidden;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    animation: 1.5s fadeIn;
 }
 
 li {
     float: left;
+    animation: 1.5s fadeIn;
 }
 
 .navList {
@@ -215,6 +230,7 @@ li a:hover {
     margin-left: 10%;
     color: #53ceff;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    animation: 1.5s fadeIn;
 }
 
 .mainHead {
@@ -231,6 +247,7 @@ li a:hover {
     width: 160px;
     margin-left: 15px;
     transition: background-color 0.3s ease-in;
+    animation: 1.5s fadeIn;
 }
 
 .button:hover, #loginBtn:hover {
@@ -244,6 +261,7 @@ li a:hover {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     text-align: center;
     padding-top: 25px;
+    animation: 1.5s fadeIn;
 }
 
 .boxCenter {
@@ -253,6 +271,7 @@ li a:hover {
     height: 460px;
     margin: 0 auto;
     display: block;
+    animation: 1.5s fadeIn;
 }
 
 .inputs {
@@ -290,6 +309,8 @@ input:focus {
     margin: auto;
     margin-top: 15px;
     transition: background-color 0.2s ease-in;
+    animation: 1.5s fadeIn;
+
 }
 
 #createBtn:hover, #loginBtn:hover {
