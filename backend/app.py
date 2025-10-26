@@ -298,40 +298,44 @@ def getHistory():
 @app.route("/submit", methods=["POST"])
 def submit():
 
-    data = request.get_json()
-    text = data.get("text")
-    image = data.get("image")
-
-    # return early if either text or image not there
-    if not text or not image:
-        return jsonify({"error": "Missing text or image"}), 400
-
-    # making sure image sending will work
     try:
-        image_b64_string = image.split(",")[1]
-        image_mime_type = image.split(",")[0].split(":")[1].split(";")[0]
-    except Exception:
-        return jsonify({"error": "Invalid image data"}), 400
+        data = request.get_json()
+        text = data.get("text")
+        image = data.get("image")
 
-    prompt = f"The student explained: '{text}'. Ask thoughtful, guiding questions in the Feynman learning style."
+        # return early if either text or image not there
+        if not text or not image:
+            return jsonify({"error": "Missing text or image"}), 400
 
-    image_part = {
-        "mime_type": image_mime_type,
-        "data": image_b64_string
-    }
+        # making sure image sending will work
+        try:
+            image_b64_string = image.split(",")[1]
+            image_mime_type = image.split(",")[0].split(":")[1].split(";")[0]
+        except Exception:
+            return jsonify({"error": "Invalid image data"}), 400
 
-    response_stream = model.generate_content_stream([prompt, image_part])
-    
-    
-    # calling gemini
-    try:
+        prompt = f"The student explained: '{text}'. Ask thoughtful, guiding questions in the Feynman learning style."
 
-        response = model.generate_content(
-            [prompt, {"mime_type": "image/png", "data": image_bytes}]
-        )
-        return jsonify({"ai_response": response.text})
+        image_part = {
+            "mime_type": image_mime_type,
+            "data": image_b64_string
+        }
+
+        response_stream = model.generate_content_stream([prompt, image_part])
+        
+        def sendChunks():
+            try:
+                for chunk in response_stream:
+                    yield chunk.txt
+            except Exception as e:
+                print(f"Error in submit stream: {e}")
+                yield f"Error: {e}"
+                
+        return Response(sendChunks(), mimetype='text/plain')
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print(f"Error: {e}")
+
+
 
 @app.route('/')
 def serve_index():
