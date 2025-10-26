@@ -5,7 +5,7 @@ import google.generativeai as genai
 import base64
 import json
 from pathlib import Path
-from dateTime import datetime
+from datetime import datetime
 import db
 
 ### initializations ###
