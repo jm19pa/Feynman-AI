@@ -23,7 +23,7 @@ def connect_to_database():
         if conn.is_connected():
             print("Connected to database")
             return conn
-    except Error as e:
+    except Exception as e:
         print(f" Error connecting to database: {e}")
         return None
 
@@ -38,7 +38,7 @@ def get_db_connection():
         )
         if connection.is_connected():
             return connection
-    except Error as e:
+    except Exception as e:
         print(f"Error connecting to database: {e}")
         return None
     
@@ -59,7 +59,7 @@ def query(sql, params=None):
         cursor.execute(sql, params or ())
         results = cursor.fetchall()
         return results
-    except Error as e:
+    except Exception as e:
         print(f"Query Error: {e}")
         return []
     finally:
@@ -84,7 +84,7 @@ def execute(sql, params=None):
         conn.commit()
         lastRowID = cursor.lastrowid
         return lastRowID
-    except Error as e:
+    except Exception as e:
         print(f"Execute Error: {e}")
         return None
     finally:
