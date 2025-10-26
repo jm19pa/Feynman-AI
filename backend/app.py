@@ -224,6 +224,38 @@ def newChat():
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
 
+@app.route("/analyze_image", methods=["POST"])
+def analyze_image():
+    try:
+        data = request.get_json()
+        image_data = data.get("image")
+
+        if not image_data:
+            return jsonify({"error": "No image provided"}), 400
+
+        # Decode base64 image (strip header)
+        header, encoded = image_data.split(",", 1)
+        img_bytes = base64.b64decode(encoded)
+
+        # Send to Gemini with your model
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        prompt = (
+            "You're being shown an image drawn by a student. "
+            "Analyze the image and provide feedback or ask questions that will point the student in the right direction"
+            "As if you are using the Feynman learning technique."
+        )
+
+        response = model.generate_content([
+            prompt,
+            {"mime_type": "image/png", "data": img_bytes}
+        ])
+
+        return jsonify({"response": response.text})
+
+    except Exception as e:
+        print(f"Error in analyze_image: {e}")
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/api/chat/message", methods=["POST"])
 def sendChatMessage():
     try:

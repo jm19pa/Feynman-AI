@@ -316,14 +316,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const imageData = canvas.toDataURL("image/png");
         addMessage("🖼️ Sent drawing to AI...", "user");
 
-        const response = await fetch("/analyze_drawing", {
+        const response = await fetch("/analyze_image", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ image: imageData }),
         });
 
         const data = await response.json();
-        addMessage(data.reply || "AI couldn't analyze the image.", "model");
+        addMessage(data.response || "AI couldn't analyze the image.", "model");
       };
 
     updateCursor();
