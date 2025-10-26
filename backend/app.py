@@ -306,7 +306,7 @@ def newChat():
 
 
         
-@app.route("/returningChat", methods="GET")
+@app.route("/returningChat", methods=["GET"])
 def returningChat():
 
     data = request.json()

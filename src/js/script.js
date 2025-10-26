@@ -81,20 +81,31 @@ async function doRegister() {
 
 
 function checkPassword(){
-    let passwordText = document.getElementById("passRegister").value;
+  const passElem = document.getElementById("passRegister");
+  const verifyElem = verifyPassText || document.getElementById("verifyPassRegister");
 
-    if (length(passwordText) < 8 || length(passwordText) > 20){
-        window.alert("Password must be between 8 - 20 characters"); // temp so we can do DOM later
-        return false;
-    }
-
-    if (passwordText != verifyPassText.value){
-        console.log("Make sure passwords are equal"); // not an alert for ease-of-use
-        return false;
-    }
-
+  if (!passElem || !verifyElem) {
+    // Elements not present on the page (e.g., different form) — don't block execution
+    console.warn("Password inputs not found in DOM for checkPassword");
     return true;
+  }
+
+  const passwordText = passElem.value || "";
+
+  if (passwordText.length < 8 || passwordText.length > 20){
+    window.alert("Password must be between 8 - 20 characters"); // temp so we can do DOM later
+    return false;
+  }
+
+  if (passwordText !== verifyElem.value){
+    console.log("Make sure passwords are equal"); // not an alert for ease-of-use
+    return false;
+  }
+
+  return true;
 
 }
 
-verifyPassText.addEventListener('blur', checkPassword);
+if (verifyPassText) {
+  verifyPassText.addEventListener('blur', checkPassword);
+}
