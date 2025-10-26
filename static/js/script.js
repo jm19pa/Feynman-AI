@@ -28,7 +28,7 @@ async function doLogin() {
       localStorage.setItem('userID', data.user_id);
       localStorage.setItem('username', data.username);
 
-      window.location.href = "chat.html" // will change later to selection.html
+      window.location.href = "selection.html"
     } else {
       alert(`Login failed: ${data.error}`);
     }
@@ -89,11 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentSessionId = localStorage.getItem('currentSessionId');
 
   async function startNewChat() {
-    const conceptMain = "Python";
-    const subCategoriesArr = "local variables,conditionals";
+    const conceptMain = document.getElementById("conceptMain").value;
+    const subCategoriesArr = document.getElementById("subCategoriesArr").value;
     const subCategories = subCategoriesArr.split(',').map(s => s.trim()).filter(s => s.length > 0);
-    const knowledgeLevel = "1";
-    const context = "School";
+    const knowledgeLevel = document.getElementById("knowledgeLevel").value;
+    const context = document.getElementById("context").value;
 
     const payload = {
       conceptMain,
@@ -132,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       currentSessionId = data.session_id;
       localStorage.setItem('currentSessionId', currentSessionId);
+      window.location.href = "chat.html";
       chatLog.innerHTML = '';
       createParagraph(data.first_message, 'model');
     }
