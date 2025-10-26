@@ -222,7 +222,7 @@ def test(conceptMain=str, subCategories=list, knowledgeLevel=str, context=str):
     return
 
 # BUILDS A NEW MODEL
-@app.route("/newChat", methods="GET")
+@app.route("/newChat", methods=["GET"])
 def newChat():
     
     try:
