@@ -338,13 +338,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (submitDrawing)
       submitDrawing.onclick = async () => {
-        const imageData = canvas.toDataURL("image/png");
-        addMessage("🖼️ Sent drawing to AI...", "user");
+        const canvas = document.getElementById("canvas");
+        const dataURL = canvas.toDataURL("image/png");
 
-        const response = await fetch("/analyze_image", {
+        await fetch("/analyze_image", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ image: imageData }),
+          body: JSON.stringify({ image: dataURL })
         });
 
         const data = await response.json();
