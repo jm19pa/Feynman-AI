@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:5000';
+const API_BASE = '';
 
 // === Login & Register Logic (yours, unchanged) ===
 const verifyPassText = document.getElementById("verifyPassRegister");
@@ -69,10 +69,10 @@ async function doRegister() {
     const data = await response.json();
 
     if (response.ok) {
-      alert("✅ Account created successfully!");
+      alert("Account created successfully!");
       window.location.href = "login.html";
     } else {
-      alert(`❌ Error: ${data.error || "Registration failed."}`);
+      alert(`Error: ${data.error || "Registration failed."}`);
     }
   } catch (err) {
     console.error("Error:", err);
