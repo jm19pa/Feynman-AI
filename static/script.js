@@ -1,4 +1,4 @@
-const API_BASE = "https://fainman.us";
+const API_BASE = "";
 
 const verifyPassText = document.getElementById("verifyPassRegister");
 const registerButton = document.getElementById("registerButton");
@@ -14,11 +14,11 @@ async function doLogin() {
   }
 
   try {
-        const response = await fetch(`${API_BASE}/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password })
-        });
+            const response = await fetch("/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
 
 
     const data = await response.json();
@@ -60,10 +60,10 @@ async function doRegister() {
   }
 
   try {
-    const response = await fetch(`${API_BASE}/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password })
+        const response = await fetch("/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, email, password })
     });
 
     const data = await response.json();
