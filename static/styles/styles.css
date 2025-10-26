@@ -356,6 +356,10 @@ input:focus {
     font-size: 25px;
 }
 
+/* selection page */
+.textWindow{
+    margin: 10px;
+}
 
 /* chat window */
 .user{
