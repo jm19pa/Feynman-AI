@@ -291,7 +291,6 @@ input {
     height: 45px;
 }
 
-/* implement input:focus */
 input:focus {
     outline: none;
 }
@@ -336,6 +335,13 @@ input:focus {
     transition: 0.3s ease-in;
 }
 
+
+/* about page */
+#about {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    padding: 20px;
+    margin: 0 auto;
+}
 
 
 /* chat window */
