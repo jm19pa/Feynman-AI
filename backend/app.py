@@ -228,7 +228,7 @@ def newChat():
         
     except Exception as e:
         print(f"Error: {e}")
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": e}), 500
 
 @app.route("/analyze_image", methods=["POST"])
 def analyze_image():
