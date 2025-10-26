@@ -205,7 +205,7 @@ def newChat():
             
         except Exception as e:
             print(f"Error: {e}")
-            return jsonify({"error": "database error"}), 500
+            return jsonify({"error": "database error " + e}), 500
             
         initialPromptParts = [{"text": prompt}]
         saveMessage(newSessionID, 'user', initialPromptParts)
