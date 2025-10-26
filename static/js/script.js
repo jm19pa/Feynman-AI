@@ -25,7 +25,7 @@ async function doLogin() {
 
     if (response.ok) {
       alert("Login successful!");
-      localStorage.setItem('userId', data.user_id);
+      localStorage.setItem('userID', data.user_id);
       localStorage.setItem('username', data.username);
 
       window.location.href = "chat.html" // will change later to selection.html
@@ -85,8 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputText = document.getElementById("textBox");
   const sendButton = document.getElementById("send");
 
+  let currentUserId = localStorage.getItem('userID');
   let currentSessionId = localStorage.getItem('currentSessionId');
-  let currentUserId = localStorage.getItem('userId');
 
   async function startNewChat() {
     const conceptMain = "Python";
@@ -111,7 +111,20 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (!response.ok) {
-        print("Response not okay");
+        console.log("No session ID found, starting a new chat...");
+        try {
+            await startNewChat();
+            // startNewChat() will set the global 'currentSessionId'
+            if (!currentSessionId) {
+                // If it's *still* null, the API call failed
+                console.error("Failed to start a new chat.");
+                createParagraph("Sorry, I couldn't start a new chat session. Please reload.", "model");
+                return;
+            }
+        } catch (err) {
+            console.error(err);
+            return;
+        }
         return;
       }
 
@@ -132,10 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (inputTextValue === '') return;
 
-    if (!currentSessionId) {
-      window.alert("Invalid session ID, start a new chat");
-      return;
-    }
 
     inputText.value = '';
     createParagraph(inputTextValue, 'user');
@@ -379,149 +388,3 @@ function checkPassword() {
 
   return true;
 }
-
-// // === Chat & Drawing Logic ===
-// document.addEventListener("DOMContentLoaded", () => {
-//   const chatLog = document.getElementById("chatLog");
-//   const textBox = document.getElementById("textBox");
-//   const sendBtn = document.getElementById("send");
-
-//   if (chatLog && sendBtn && textBox) {
-//     function addMessage(text, sender) {
-//       const msg = document.createElement("div");
-//       msg.classList.add("msg", sender);
-//       msg.innerText = text;
-//       chatLog.appendChild(msg);
-//       chatLog.scrollTop = chatLog.scrollHeight;
-//     }
-
-//     async function sendMessage() {
-//       const message = textBox.value.trim();
-//       if (!message) return;
-//       addMessage(message, "user");
-//       textBox.value = "";
-
-//       const response = await fetch("/chat", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ message }),
-//       });
-
-//       const data = await response.json();
-//       addMessage(data.reply || "Error: No reply received.", "model");
-//     }
-
-//     sendBtn.addEventListener("click", sendMessage);
-//     textBox.addEventListener("keypress", e => {
-//       if (e.key === "Enter") sendMessage();
-//     });
-//   }
-
-//   // === Drawing Board Logic ===
-//   const canvas = document.getElementById("canvas");
-//   if (canvas) {
-//     const ctx = canvas.getContext("2d");
-//     const cursor = document.getElementById("brushCursor");
-//     let drawing = false;
-//     let erasing = false;
-//     let brushSize = 8; // size of circle (px)
-
-//     // keep canvas crisp and filled white
-//     function resizeCanvas() {
-//       const rect = canvas.getBoundingClientRect();
-//       canvas.width = rect.width;
-//       canvas.height = rect.height;
-//       ctx.fillStyle = "white";
-//       ctx.fillRect(0, 0, canvas.width, canvas.height);
-//     }
-//     resizeCanvas();
-//     window.addEventListener("resize", resizeCanvas);
-
-//     // Draw logic
-//     canvas.addEventListener("mousedown", () => (drawing = true));
-//     canvas.addEventListener("mouseup", () => {
-//       drawing = false;
-//       ctx.beginPath();
-//     });
-//     canvas.addEventListener("mousemove", (e) => {
-//       const rect = canvas.getBoundingClientRect();
-//       const x = e.clientX - rect.left;
-//       const y = e.clientY - rect.top;
-
-//       // update cursor position
-//       cursor.style.left = `${x + rect.left}px`;
-//       cursor.style.top = `${y + rect.top}px`;
-
-//       if (!drawing) return;
-//       ctx.lineWidth = brushSize;
-//       ctx.lineCap = "round";
-//       ctx.strokeStyle = erasing ? "white" : "#000";
-//       ctx.lineTo(x, y);
-//       ctx.stroke();
-//       ctx.beginPath();
-//       ctx.moveTo(x, y);
-//     });
-
-//     // Show / hide custom cursor
-//     canvas.addEventListener("mouseenter", () => {
-//       cursor.style.display = "block";
-//       updateCursor();
-//     });
-//     canvas.addEventListener("mouseleave", () => {
-//       cursor.style.display = "none";
-//     });
-
-//     // Update cursor appearance
-//     function updateCursor() {
-//       cursor.style.width = `${brushSize}px`;
-//       cursor.style.height = `${brushSize}px`;
-//       cursor.style.borderColor = erasing ? "#ff5e5e" : "#00b4d8";
-//     }
-
-//     // Buttons
-//     const penBtn = document.getElementById("penBtn");
-//     const eraserBtn = document.getElementById("eraserBtn");
-//     const clearBtn = document.getElementById("clearBtn");
-//     const submitDrawing = document.getElementById("submitDrawing");
-
-//     if (penBtn)
-//       penBtn.onclick = () => {
-//         erasing = false;
-//         penBtn.classList.add("active");
-//         eraserBtn.classList.remove("active");
-//         updateCursor();
-//       };
-
-//     if (eraserBtn)
-//       eraserBtn.onclick = () => {
-//         erasing = true;
-//         eraserBtn.classList.add("active");
-//         penBtn.classList.remove("active");
-//         updateCursor();
-//       };
-
-//     if (clearBtn)
-//       clearBtn.onclick = () => {
-//         ctx.fillStyle = "white";
-//         ctx.fillRect(0, 0, canvas.width, canvas.height);
-//       };
-
-//     if (submitDrawing)
-//       submitDrawing.onclick = async () => {
-//         const imageData = canvas.toDataURL("image/png");
-//         addMessage("🖼️ Sent drawing to AI...", "user");
-
-//         const response = await fetch("/analyze_drawing", {
-//           method: "POST",
-//           headers: { "Content-Type": "application/json" },
-//           body: JSON.stringify({ image: imageData }),
-//         });
-
-//         const data = await response.json();
-//         addMessage(data.reply || "AI couldn't analyze the image.", "model");
-//       };
-
-//     updateCursor();
-//   }
-
-// });
