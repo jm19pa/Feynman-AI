@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash , check_password_hash
 from flask_cors import CORS
 from db import query, execute
 import google.generativeai as genai
@@ -52,6 +52,46 @@ def register():
         return jsonify({"message": "User registered successfully"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+  
+#login
+@app.route("/login", methods=["POST", "GET"])
+def login():
+
+    if request.method == "GET":
+        return jsonify({"message": "Send a POST request with username and password to log in."})
+    
+    data = request.get_json()
+    identifier = data.get("username")  # can be a username OR an email address
+    password = data.get("password")
+
+    if not identifier or not password:
+        return jsonify({"error": "Username/email and password are required"}), 400
+
+    try:
+        # Treat the provided identifier as an email if it contains '@' and '.'
+        if "@" in identifier and "." in identifier:
+            user = query(
+                "SELECT * FROM users WHERE email=%s",
+                (identifier,)
+            )
+        else:
+            user = query(
+                "SELECT * FROM users WHERE username=%s",
+                (identifier,)
+            )
+
+        if not user:
+            return jsonify({"error": "Invalid username or password"}), 401
+        
+        stored_hashed_password = user[0]["password"]
+
+        if not check_password_hash(stored_hashed_password, password):
+            return jsonify({"error": "Invalid username or password"}), 401
+
+        return jsonify({"message": "Login successful"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  
 
 # testing gemini api
 @app.route("/test", methods=["GET"])
