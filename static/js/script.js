@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
       subCategories,
       knowledgeLevel,
       context,
-      user_id: currentUserID
+      user_id: currentUserId
     }
 
     try {
