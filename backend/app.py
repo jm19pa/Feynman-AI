@@ -167,6 +167,7 @@ def newChat():
 
         # creating a singular string that contains all elements in subCategories
         subCategoriesString = ", ".join(subCategories)
+        subCategoriesString="variables"
         inputtedFields = [conceptMain, subCategoriesString, knowledgeLevel, context]
 
         # base_dir = Path(__file__).parent
