@@ -159,7 +159,7 @@ def newChat():
         subCategories = data.get("subCategories")
         knowledgeLevel = data.get("knowledgeLevel")
         context = data.get("context")
-        userID = data.get("user_id")
+        userID = int(data.get("user_id"))
         
         if not userID:
             return jsonify({"error": "No userID found"}), 400
