@@ -71,9 +71,9 @@ def saveMessage(sessionID, role, parts):
 ### api routes ###
 
 # testing basic api
-@app.route("/")
-def home():
-    return jsonify({"message": "Welcome to the Feynman AI Flask API!"})
+# @app.route("/")
+# def home():
+#     return jsonify({"message": "Welcome to the Feynman AI Flask API!"})
 
 #register
 @app.route("/register", methods=["POST", "GET"])
