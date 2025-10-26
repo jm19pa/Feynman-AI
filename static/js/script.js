@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatLog = document.getElementById("chatLog");
   const inputText = document.getElementById("textBox");
   const sendButton = document.getElementById("send");
+  const startChatButton = document.getElementById("startNewChat");
 
   let currentUserId = localStorage.getItem('userID');
   let currentSessionId = localStorage.getItem('currentSessionId');
@@ -389,6 +390,9 @@ document.addEventListener('DOMContentLoaded', () => {
         sendMessage();
       }
     })
+  }
+  if (startChatButton){
+    startChatButton.addEventListener('click', startNewChat);
   }
 
   function displayMessage(text, role) {
