@@ -177,7 +177,7 @@ def newChat():
                         "{inputtedKnowledgeLevel}", 
                         "{inputtedContext}"]
         
-        print(f"Attempting to open prompt path at: {promptPath.resolve()}")
+        # print(f"Attempting to open prompt path at: {promptPath.resolve()}")
         
         # opening prompt file & appending data
         try:
