@@ -25,7 +25,7 @@ async function doLogin() {
 
     if (response.ok) {
       alert("Login successful!");
-      localStorage.setItem('userID', data.id);
+      localStorage.setItem('userID', data.user_id);
       localStorage.setItem('username', data.username);
 
       window.location.href = "selection.html"
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
       subCategories,
       knowledgeLevel,
       context,
-      id: currentUserId
+      user_id: currentUserId
     }
 
     try {
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       const data = await response.json();
-
+      
       if (!response.ok) {
         // If the response is not OK, alert the user and stop.
         console.error("Failed to start new chat:", data.error || response.statusText);
