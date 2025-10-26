@@ -3,14 +3,14 @@ from mysql.connector import Error
 from dotenv import load_dotenv
 import os
 
-load_dotenv("/etc/env")
+load_dotenv("/etc/environment")
 
-'''print("=== ENV DEBUG ===")
+print("=== ENV DEBUG ===")
 print("DB_HOST:", os.getenv("DB_HOST"))
 print("DB_USER:", os.getenv("DB_USER"))
 print("DB_PASSWORD:", os.getenv("DB_PASSWORD"))
 print("DB_NAME:", os.getenv("DB_NAME"))
-print("=================")'''
+print("=================")
 
 def connect_to_database():
     try:
