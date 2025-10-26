@@ -343,6 +343,10 @@ input:focus {
     margin: 0 auto;
 }
 
+/* selection page */
+.textWindow{
+    margin: 10px;
+}
 
 /* chat window */
 .user{

@@ -168,14 +168,16 @@ def newChat():
         subCategoriesString = ", ".join(subCategories)
         inputtedFields = [conceptMain, subCategoriesString, knowledgeLevel, context]
 
-        base_dir = Path(__file__).parent
-        promptPath = base_dir / "prompt.txt"
+        # base_dir = Path(__file__).parent
+        promptPath = "/var/www/html/backend/prompt.txt"
 
         # we do this to create unique prompts for each instance
         replaceKeywords = ["{inputtedConceptMain}", 
                         "{inputtedConcepts}", 
                         "{inputtedKnowledgeLevel}", 
                         "{inputtedContext}"]
+        
+        print(f"Attempting to open prompt path at: {promptPath.resolve()}")
         
         # opening prompt file & appending data
         try:
