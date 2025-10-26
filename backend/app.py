@@ -224,46 +224,87 @@ def test(conceptMain=str, subCategories=list, knowledgeLevel=str, context=str):
 # BUILDS A NEW MODEL
 @app.route("/newChat", methods="GET")
 def newChat():
-
-    data = request.json()
-    conceptMain = data.get("conceptMain")
-    subCategories = data.get("subCategories")
-    knowledgeLevel = data.get("knowledgeLevel")
-    context = data.get("context")
-
-    # creating a singular string that contains all elements in subCategories
-    subCategories = ", ".join(subCategories)
-
-    inputtedFields = []
-
-    inputtedFields.append(conceptMain)
-    inputtedFields.append(subCategories)
-    inputtedFields.append(knowledgeLevel)
-    inputtedFields.append(context)
-
-    # starting a chat so gemini remembers everything
-    chat = model.start_chat()
-
-    prompt = ""
-
-    localPath = f"{Path.cwd()}\\backend\\prompt.txt"
-    serverPath = ""
-
-    # we do this to create unique prompts for each instance
-    replaceKeywords = ["{inputtedConceptMain}", 
-                    "{inputtedConcepts}", 
-                    "{inputtedKnowledgeLevel}", 
-                    "{inputtedContext}"]
-
-    # opening prompt file & appending data
+    
     try:
-        with open(file=localPath, mode='r') as promptFile:
-            prompt = promptFile.read()
-            for i, keyword in enumerate(replaceKeywords):
-                prompt = prompt.replace(keyword, inputtedFields[i])
-    except FileNotFoundError:
-        print("Prompt file was not found")
-        return
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No JSON body provided"}), 400
+            
+        conceptMain = data.get("conceptMain")
+        subCategories = data.get("subCategories")
+        knowledgeLevel = data.get("knowledgeLevel")
+        context = data.get("context")
+        userID = data.get("user_id")
+        
+        if not userID:
+            return jsonify({"error": "No userID found"}), 300
+
+
+        # creating a singular string that contains all elements in subCategories
+        subCategoriesString = ", ".join(subCategories)
+        inputtedFields = [conceptMain, subCategoriesString, knowledgeLevel, context]
+
+        promptPath = f"{Path.cwd()}\\backend\\prompt.txt"
+
+        # we do this to create unique prompts for each instance
+        replaceKeywords = ["{inputtedConceptMain}", 
+                        "{inputtedConcepts}", 
+                        "{inputtedKnowledgeLevel}", 
+                        "{inputtedContext}"]
+        
+        # opening prompt file & appending data
+        try:
+            with open(file=promptPath, mode='r') as promptFile:
+                prompt = promptFile.read()
+                for i, keyword in enumerate(replaceKeywords):
+                    prompt = prompt.replace(keyword, inputtedFields[i])
+        except FileNotFoundError:
+            print("Prompt file was not found")
+            return jsonify({"error": "Server error"}), 500
+            
+        # create a new session
+        newSessionID = None
+        try:
+            query = "INSERT INTO ChatSessions (user_id, title) VALUES (%s, %s)"
+            
+            # main concept will be the title of the chat logs
+            newSessionID = db.execute(query, (userID, conceptMain))
+            
+            if not newSessionID:
+                raise Exception("Failed to create a new session in database.")
+            
+            print(f"New session is: {newSessionID}")
+            
+        except Exception as e:
+            print(f"Error: {e}")
+            return jsonify({"error": "database error"}), 500
+            
+        initialPromptParts = [{"text": prompt}]
+        saveMessage(newSessionID, 'user', initialPromptParts)
+        
+        chat = model.start_chat(history=[
+            {"role": "user", "parts": initialPromptParts}
+        ])
+        
+        firstResponse = chat.send_message("Please introduce yourself based on the instructions given")
+        
+        modelParts = firstResponse.candidates[0].content.parts
+        
+        saveMessage(newSessionID, 'model', modelParts)
+        
+        return jsonify({
+            "session_id": newSessionID,
+            "first_message": firstResponse.text
+        })
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": str(e)}), 500
+        
+
+            
+
+
         
 @app.route("/returningChat", methods="GET")
 def returningChat():
