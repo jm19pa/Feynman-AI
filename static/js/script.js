@@ -373,6 +373,12 @@ document.addEventListener('DOMContentLoaded', () => {
     return newParagraph;
   }
 
+  function addMessage(text, role) {
+  const msg = createParagraph(text, role);
+  chatLog.appendChild(msg);
+  chatLog.scrollTop = chatLog.scrollHeight;
+}
+
   if (sendButton) {
     sendButton.addEventListener('click', sendMessage);
   }
