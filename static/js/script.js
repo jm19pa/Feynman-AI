@@ -104,6 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
       user_id: currentUserId
     }
 
+    console.log(payload)
+
     try {
       const response = await fetch(`${API_BASE}/api/chat/new`, {
         method: 'POST',
