@@ -4,14 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
     <title>Login</title>
 </head>
 <body>
-    <h1>LOGIN PAGE</h1>
-    <input type="text" placeholder="Username" id="userLogin">
-    <input type="text" placeholder="Password" id="passLogin">
-    <button onclick="doLogin()">Send</button>
-    <p>CHANGE PASSWORD TYPE TO PASSWORD BEFORE SUBMISSION</p>
+    <div id="navBar">
+        <ul>
+            <li><a class="fainman" href="index.html">fAInman</a></li>
+        </ul>
+    </div>
+
+    <div class="boxCenter">
+        <h1 id="createHead">Login</h1>
+        <ul>
+            <li class="inputs"><input type="text" placeholder="Username" id="userLogin"></li>
+            <li class="inputs"><input type="text" placeholder="Password" id="passLogin"></li>
+        </ul>
+
+        <button id="loginBtn" onclick="doLogin()">Login</button>
+        <p id="bottomText">Don't have an account? <a id="bottomLink" href="register.html">Create an account</a></p>
+    </div>
+
     <script src="js/script.js"></script>
 </body>
 </html>
