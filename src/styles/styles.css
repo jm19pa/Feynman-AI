@@ -187,25 +187,51 @@ input:focus {
 
 
 /* chat window */
-table {
-    padding: 25px;
-    margin: auto;
-}
-
-#chat {
-    background-color: #282828;
-    border-radius: 15px;
-    width: 1500px;
-    height: 620px;
-}
-
-#emptySpace {
+#container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    justify-self: center;
     background-color: black;
-    width: 150px;
+    gap: 2vw;
+    width: 95vw;
+    height: 95vh;
 }
 
-#drawingBoard {    
+#chatPanel {
     background-color: #282828;
     border-radius: 15px;
-    width: 75%;
+    width: 25vw;
+    margin: 1vw;
+}
+#chatHead, #drawingHead {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    padding: 10px;
+    font-size: 25px;
+}
+
+#drawingBoard {
+    background-color: #282828;
+    border-radius: 15px;
+    width: 65vw;
+    margin: 1vw;
+}
+
+#inputArea {
+    padding-left: 20px;
+    margin-top: 33vw;
+}
+
+#send {
+    color: white;
+    font-size: 20px;
+    background: none;
+    border: none;
+    transition: 0.2s ease-in;
+}
+
+#send:hover {
+    cursor: pointer;
+    color:#53ceff;
+    transition: 0.3s ease-in;    
 }
