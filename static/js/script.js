@@ -113,17 +113,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) {
         console.log("No session ID found, starting a new chat...");
         try {
-            await startNewChat();
-            // startNewChat() will set the global 'currentSessionId'
-            if (!currentSessionId) {
-                // If it's *still* null, the API call failed
-                console.error("Failed to start a new chat.");
-                createParagraph("Sorry, I couldn't start a new chat session. Please reload.", "model");
-                return;
-            }
-        } catch (err) {
-            console.error(err);
+          await startNewChat();
+          // startNewChat() will set the global 'currentSessionId'
+          if (!currentSessionId) {
+            // If it's *still* null, the API call failed
+            console.error("Failed to start a new chat.");
+            createParagraph("Sorry, I couldn't start a new chat session. Please reload.", "model");
             return;
+          }
+        } catch (err) {
+          console.error(err);
+          return;
         }
         return;
       }
@@ -149,6 +149,31 @@ document.addEventListener('DOMContentLoaded', () => {
     inputText.value = '';
     createParagraph(inputTextValue, 'user');
     chatLog.scrollTop = chatLog.scrollHeight;
+
+
+    console.log("Sending to /api/chat/message:", {
+      session_id: currentSessionId,
+      message: inputTextValue
+    });
+
+    if (!currentSessionId) {
+      try {
+        // If it's null, call startNewChat() first
+        console.log("No session ID, starting a new chat...");
+        await startNewChat();
+        // startNewChat() will set the global currentSessionId
+
+        // If it's *still* null, the API call failed
+        if (!currentSessionId) {
+          console.error("Failed to start a new chat.");
+          createParagraph("Sorry, I couldn't start a new chat session. Please reload.", "model");
+          return;
+        }
+      } catch (err) {
+        console.error("Error starting new chat:", err);
+        return;
+      }
+    }
 
     try {
       const response = await fetch(`${API_BASE}/api/chat/message`, {
