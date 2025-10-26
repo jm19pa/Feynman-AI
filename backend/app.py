@@ -141,7 +141,7 @@ def login():
             return jsonify({"error": "Invalid username or password"}), 401
 
         user_data = user[0]
-        return jsonify({"message": "Login successful", "user_id": user_data["user_id"], "username": user_data["username"]}), 200
+        return jsonify({"message": "Login successful", "id": user_data["id"], "username": user_data["username"]}), 200
     except Exception as e:
         app.logger.error(f"LOGIN FAILED: {e}")
         return jsonify({"error": str(e)}), 500  
@@ -159,7 +159,7 @@ def newChat():
         subCategories = data.get("subCategories")
         knowledgeLevel = data.get("knowledgeLevel")
         context = data.get("context")
-        userID = data.get("user_id")
+        userID = data.get("id")
         
         if not userID:
             return jsonify({"error": "No userID found"}), 400
@@ -193,7 +193,7 @@ def newChat():
         # create a new session
         newSessionID = None
         try:
-            query = "INSERT INTO ChatSessions (user_id, title) VALUES (%s, %s)"
+            query = "INSERT INTO ChatSessions (id, title) VALUES (%s, %s)"
             
             # main concept will be the title of the chat logs
             newSessionID = db.execute(query, (userID, conceptMain))
