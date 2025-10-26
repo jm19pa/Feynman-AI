@@ -66,7 +66,7 @@ def saveMessage(sessionID, role, parts):
 
         db.execute(query, (sessionID, role, contentPartsJSON, datetime.now()))
     except Exception as e:
-        print(f"Excetion: {e}")
+        print(f"Excpetion: {e}")
         
 ### api routes ###
 
@@ -140,7 +140,8 @@ def login():
         if not check_password_hash(stored_hashed_password, password):
             return jsonify({"error": "Invalid username or password"}), 401
 
-        return jsonify({"message": "Login successful"}), 200
+        user_data = user[0]
+        return jsonify({"message": "Login successful", "user_id": user_data["user_id"], "username": user_data["username"]}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500  
 
@@ -160,14 +161,15 @@ def newChat():
         userID = data.get("user_id")
         
         if not userID:
-            return jsonify({"error": "No userID found"}), 300
+            return jsonify({"error": "No userID found"}), 400
 
 
         # creating a singular string that contains all elements in subCategories
         subCategoriesString = ", ".join(subCategories)
         inputtedFields = [conceptMain, subCategoriesString, knowledgeLevel, context]
 
-        promptPath = Path.cwd() / "backend" / "prompt.txt"
+        base_dir = Path(__file__).parent 
+        promptPath = base_dir / "prompt.txt"
 
         # we do this to create unique prompts for each instance
         replaceKeywords = ["{inputtedConceptMain}", 
@@ -238,7 +240,7 @@ def analyze_image():
         img_bytes = base64.b64decode(encoded)
 
         # Send to Gemini with your model
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-2.5-flash")
         prompt = (
             "You're being shown an image drawn by a student. "
             "Analyze the image and provide feedback or ask questions that will point the student in the right direction"
@@ -358,7 +360,7 @@ def submit():
         def sendChunks():
             try:
                 for chunk in response_stream:
-                    yield chunk.txt
+                    yield chunk.text
             except Exception as e:
                 print(f"Error in submit stream: {e}")
                 yield f"Error: {e}"

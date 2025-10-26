@@ -112,20 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (!response.ok) {
-        console.log("No session ID found, starting a new chat...");
-        try {
-          await startNewChat();
-          // startNewChat() will set the global 'currentSessionId'
-          if (!currentSessionId) {
-            // If it's *still* null, the API call failed
-            console.error("Failed to start a new chat.");
-            createParagraph("Sorry, I couldn't start a new chat session. Please reload.", "model");
-            return;
-          }
-        } catch (err) {
-          console.error(err);
-          return;
-        }
+        // If the response is not OK, alert the user and stop.
+        console.error("Failed to start new chat:", data.error || response.statusText);
+        alert(`Error: ${data.error || 'Could not start new chat.'}`);
         return;
       }
 
@@ -159,22 +148,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (!currentSessionId) {
-      try {
-        // If it's null, call startNewChat() first
-        console.log("No session ID, starting a new chat...");
-        await startNewChat();
-        // startNewChat() will set the global currentSessionId
-
-        // If it's *still* null, the API call failed
-        if (!currentSessionId) {
-          console.error("Failed to start a new chat.");
-          createParagraph("Sorry, I couldn't start a new chat session. Please reload.", "model");
-          return;
-        }
-      } catch (err) {
-        console.error("Error starting new chat:", err);
-        return;
-      }
+      console.error("sendMessage failed: No currentSessionId.");
+      createParagraph("Your chat session is invalid or has expired. Please start a new chat.", "model");
+      // You could also force a redirect:
+      // window.location.href = "selection.html";
+      return;
     }
 
     try {
@@ -343,13 +321,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const canvas = document.getElementById("canvas");
         const dataURL = canvas.toDataURL("image/png");
 
-        await fetch("/analyze_image", {
+        const response = await fetch("/analyze_image", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ image: dataURL })
         });
 
-        const data = await response.json();
+        const data = await response.json(); // Now 'response' is defined
         addMessage(data.response || "AI couldn't analyze the image.", "model");
       };
 
@@ -376,10 +354,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function addMessage(text, role) {
-  const msg = createParagraph(text, role);
-  chatLog.appendChild(msg);
-  chatLog.scrollTop = chatLog.scrollHeight;
-}
+    const msg = createParagraph(text, role);
+    chatLog.appendChild(msg);
+    chatLog.scrollTop = chatLog.scrollHeight;
+  }
 
   if (sendButton) {
     sendButton.addEventListener('click', sendMessage);
@@ -391,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })
   }
-  if (startChatButton){
+  if (startChatButton) {
     startChatButton.addEventListener('click', startNewChat);
   }
 
