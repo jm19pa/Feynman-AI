@@ -143,6 +143,7 @@ def login():
         user_data = user[0]
         return jsonify({"message": "Login successful", "user_id": user_data["user_id"], "username": user_data["username"]}), 200
     except Exception as e:
+        print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500  
 
 # BUILDS A NEW MODEL
