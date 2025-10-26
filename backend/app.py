@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 from werkzeug.security import generate_password_hash , check_password_hash
 from flask_cors import CORS
 import google.generativeai as genai
@@ -67,7 +67,7 @@ def saveMessage(sessionID, role, parts):
         db.execute(query, (sessionID, role, contentPartsJSON, datetime.now()))
     except Exception as e:
         print(f"Excetion: {e}")
-
+        
 ### api routes ###
 
 # testing basic api
@@ -300,11 +300,50 @@ def newChat():
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
+
+@app.route("/api/chat/message", methods=["POST"])
+def sendChatMessage():
+    try:
+        data = request.get_json()
+        sessionID = data.get("session_id")
+        newMessage = data.get("message")
         
-
-            
-
-
+        if not sessionID or not newMessage:
+            return jsonify({"error": "session_id and message are required"}), 400
+        
+        history = getChatHistory(sessionID=sessionID)
+        if history is None:
+            return jsonify({"error": "Can't get chat history"}), 500
+        
+        chat = model.start_chat(history=history)
+        
+        newMessageParts = [{"text": newMessage}]
+        
+        responseStream = chat.send_message(newMessageParts, stream=True)
+        
+        # defining inside function since it's only needed here
+        def sendChunks():
+            try:
+                chunks = []
+                for chunk in responseStream:
+                    chunks.append(chunk.text)
+                    yield chunk.text
+                    
+                saveMessage(sessionID, 'user', newMessageParts)
+                
+                modelResponseParts = chat.history[-1].parts
+                saveMessage(sessionID, 'model', modelResponseParts)
+                
+            except Exception as e:
+                print(f"Error: {e}")
+                yield f"Error: {e}"
+                
+                
+        return Response(sendChunks(), mimetype='text/plain')
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": str(e)}), 500
         
 @app.route("/returningChat", methods=["GET"])
 def returningChat():
