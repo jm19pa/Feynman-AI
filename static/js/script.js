@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
       subCategories,
       knowledgeLevel,
       context,
-      user_id: currentUserId
+      user_id: parseInt(currentUserId)
     }
 
     console.log(payload)
