@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, request
 from werkzeug.security import generate_password_hash , check_password_hash
 from flask_cors import CORS
-from db import query, execute
 import google.generativeai as genai
 import base64
+import json
 from pathlib import Path
+from dateTime import datetime
+import db
 
 ### initializations ###
 
@@ -15,7 +17,56 @@ CORS(app)
 # calling gemini & getting api key
 genai.configure()
 model = genai.GenerativeModel("gemini-2.5-flash")
-chat = model.start_chat()
+
+### helper functions ###
+
+
+def getChatHistory(sessionID):
+    
+    chatHistory = []
+    # query the chat database for everything from sessionID
+
+    try:
+        queryCommand = "SELECT role, content_parts FROM Messagers WHERE session_id = %s ORDER BY timestamp ASC"
+    
+        rows = db.query(queryCommand, (sessionID,))
+
+        # empty table
+        if not rows:
+            return []
+        
+        # build the chat history
+        for row in rows:
+            chatHistory.append({
+                "role": row["role"],
+                "parts": json.loads(row["content_parts"])
+            })
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
+    return chatHistory
+
+def saveMessage(sessionID, role, parts):
+    try:
+        query = "INSERT INTO Messages (session_id, role, content_parts, timestamp) VALUES (%s, %s, %s, %s)"
+
+        if not isinstance(parts, list):
+            parts = list(parts)
+
+        serializedParts = []
+        for part in parts:
+            try:
+                serializedParts.append({"text": part.text})
+            except AttributeError as e:
+                print(f"Attribute Error: {e}")
+                serializedParts.append(part)
+
+        contentPartsJSON = json.dumps(serializedParts)
+
+        db.execute(query, (sessionID, role, contentPartsJSON, datetime.now()))
+    except Exception as e:
+        print(f"Excetion: {e}")
 
 ### api routes ###
 
@@ -45,7 +96,7 @@ def register():
     hashed_password = generate_password_hash(password)
 
     try:
-        execute(
+        db.execute(
             "INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
             (username, email, hashed_password)
         )
@@ -71,12 +122,12 @@ def login():
     try:
         # Treat the provided identifier as an email if it contains '@' and '.'
         if "@" in identifier and "." in identifier:
-            user = query(
+            user = db.query(
                 "SELECT * FROM users WHERE email=%s",
                 (identifier,)
             )
         else:
-            user = query(
+            user = db.query(
                 "SELECT * FROM users WHERE username=%s",
                 (identifier,)
             )
@@ -224,15 +275,6 @@ def returningChat():
 
     return
 
-def getChatHistory(sessionID):
-    
-    chatHistory = []
-
-    # query the chat database for everything from sessionID
-
-    
-    
-    return chatHistory
 
 # text + image submitting
 @app.route("/submit", methods=["POST"])

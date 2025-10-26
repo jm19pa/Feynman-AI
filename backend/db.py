@@ -21,7 +21,7 @@ def connect_to_database():
             database=os.getenv("DB_NAME")
         )
         if conn.is_connected():
-            print("✅ Connected to database")
+            print("Connected to database")
             return conn
     except Error as e:
         print(f" Error connecting to database: {e}")
@@ -48,22 +48,47 @@ def query(sql, params=None):
     Run a SELECT query and return all results as a list of dictionaries.
     Example: query('SELECT * FROM users WHERE id=%s', (1,))
     """
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute(sql, params or ())
-    results = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return results
+
+    conn = None
+    cursor = None
+    
+    try:
+
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(sql, params or ())
+        results = cursor.fetchall()
+        return results
+    except Error as e:
+        print(f"Query Error: {e}")
+        return []
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 def execute(sql, params=None):
     """
     Run an INSERT, UPDATE, or DELETE query.
     Example: execute('INSERT INTO users (name) VALUES (%s)', ('Alice',))
     """
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute(sql, params or ())
-    conn.commit()
-    cursor.close()
-    conn.close()
+
+    conn = None
+    cursor = None
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(sql, params or ())
+        conn.commit()
+        lastRowID = cursor.lastrowid
+        return lastRowID
+    except Error as e:
+        print(f"Execute Error: {e}")
+        return None
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
