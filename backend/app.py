@@ -27,7 +27,7 @@ def getChatHistory(sessionID):
     # query the chat database for everything from sessionID
 
     try:
-        queryCommand = "SELECT role, content_parts FROM Messagers WHERE session_id = %s ORDER BY timestamp ASC"
+        queryCommand = "SELECT role, content_parts FROM Messages WHERE session_id = %s ORDER BY timestamp ASC"
     
         rows = db.query(queryCommand, (sessionID,))
 
@@ -144,85 +144,8 @@ def login():
     except Exception as e:
         return jsonify({"error": str(e)}), 500  
 
-# testing gemini api
-@app.route("/test", methods=["GET"])
-def test(conceptMain=str, subCategories=list, knowledgeLevel=str, context=str):
-
-    # role defines who said what "MODEL" or "USER"
-    # parts defines what was sent "TEXT" or "IMAGE"
-    jsonTemplate = {
-        "role": "",
-        "parts": ["", ""]
-    }
-
-    # understanding: 1 -> 4
-    # context: general, exam, work
-
-    # creating a singular string that contains all elements in subCategories
-    subCategories = ", ".join(subCategories)
-
-    inputtedFields = []
-
-    inputtedFields.append(conceptMain)
-    inputtedFields.append(subCategories)
-    inputtedFields.append(knowledgeLevel)
-    inputtedFields.append(context)
-
-    prompt = ""
-
-    localPath = f"{Path.cwd()}\\backend\\prompt.txt"
-    serverPath = ""
-
-    # we do this to create unique prompts for each instance
-    replaceKeywords = ["{inputtedConceptMain}", 
-                       "{inputtedConcepts}", 
-                       "{inputtedKnowledgeLevel}", 
-                       "{inputtedContext}"]
-
-    # opening prompt file & appending data
-    try:
-        with open(file=localPath, mode='r') as promptFile:
-            prompt = promptFile.read()
-            for i, keyword in enumerate(replaceKeywords):
-                prompt = prompt.replace(keyword, inputtedFields[i])
-    except FileNotFoundError:
-        print("Prompt file was not found")
-        return
-
-    chat = model.start_chat() # starting a chat so gemini remembers everything
-
-    # sending this to JSON too
-    newUserJson = jsonTemplate
-    newUserJson["role"] = "user"
-    newUserJson["parts"][0] += prompt
-
-
-    # the main logic right now for text
-    while prompt != "null":
-
-        response = chat.send_message(prompt, stream=True)
-
-        for chunk in response:
-            print(chunk.text, end="", flush=True)
-            newModelJson = jsonTemplate
-            newModelJson["role"] = "model"
-            newModelJson["parts"][0] += chunk.text
-
-        # SEND JSON FOR MODEL
-        
-        print("\nChat: ", end="")
-        prompt = input()
-
-        newUserJson = jsonTemplate
-        newUserJson["role"] = "user"
-        newUserJson["parts"][0] += prompt
-
-        # SEND JSON FOR USER
-
-    return
-
 # BUILDS A NEW MODEL
-@app.route("/newChat", methods=["GET"])
+@app.route("/api/chat/new", methods=["POST"])
 def newChat():
     
     try:
@@ -244,7 +167,7 @@ def newChat():
         subCategoriesString = ", ".join(subCategories)
         inputtedFields = [conceptMain, subCategoriesString, knowledgeLevel, context]
 
-        promptPath = f"{Path.cwd()}\\backend\\prompt.txt"
+        promptPath = Path.cwd() / "backend" / "prompt.txt"
 
         # we do this to create unique prompts for each instance
         replaceKeywords = ["{inputtedConceptMain}", 
@@ -337,24 +260,39 @@ def sendChatMessage():
             except Exception as e:
                 print(f"Error: {e}")
                 yield f"Error: {e}"
-                
-                
+                 
         return Response(sendChunks(), mimetype='text/plain')
         
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
         
-@app.route("/returningChat", methods=["GET"])
-def returningChat():
-
-    data = request.json()
-    history = data.get("history")
-
-    chat = model.start_chat(history=history)
-
-    return
-
+@app.route("/api/chat/history", methods=["POST"])
+def getHistory():
+    try:
+        data = request.get_json()
+        sessionID = data.get("session_id")
+        
+        if not sessionID:
+            return jsonify({"error": "session_id required"}), 400
+        
+        history = getChatHistory(sessionID)
+        if history is None:
+            return jsonify({"error": "Can't retrieve chat history"}), 500
+        
+        textHistory = []
+        for message in history:
+            if message['parts']:
+                textHistory.append({
+                    "role": message['role'],
+                    "text": message['parts'][0]['text']
+                })
+        
+        return jsonify({"history": textHistory})
+    
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": str(e)}), 500
 
 # text + image submitting
 @app.route("/submit", methods=["POST"])
@@ -370,23 +308,23 @@ def submit():
 
     # making sure image sending will work
     try:
-        image_bytes = base64.b64decode(image.split(",")[1])
+        image_b64_string = image.split(",")[1]
+        image_mime_type = image.split(",")[0].split(":")[1].split(";")[0]
     except Exception:
         return jsonify({"error": "Invalid image data"}), 400
 
     prompt = f"The student explained: '{text}'. Ask thoughtful, guiding questions in the Feynman learning style."
 
+    image_part = {
+        "mime_type": image_mime_type,
+        "data": image_b64_string
+    }
+
+    response_stream = model.generate_content_stream([prompt, image_part])
+    
+    
     # calling gemini
     try:
-        # notes for implementation:
-            # call model.generate_content_stream to send everything in chunks instead of a singular block (UX)
-        '''
-        JSON should be structured like:
-        [
-            {"role": "user", "parts": [{"text": "What are the top 5 RedBull flavors?", "image": null}]}
-            {"role": "model", "parts": [{"text": "idk buddy lol", "image": smelly.png}]}
-        ]        
-        '''
 
         response = model.generate_content(
             [prompt, {"mime_type": "image/png", "data": image_bytes}]
