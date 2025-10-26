@@ -111,6 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify(payload)
       });
 
+      const data = await response.json();
+      
       if (!response.ok) {
         // If the response is not OK, alert the user and stop.
         console.error("Failed to start new chat:", data.error || response.statusText);
@@ -118,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const data = await response.json();
 
       currentSessionId = data.session_id;
       localStorage.setItem('currentSessionId', currentSessionId);

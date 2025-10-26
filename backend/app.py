@@ -168,7 +168,7 @@ def newChat():
         subCategoriesString = ", ".join(subCategories)
         inputtedFields = [conceptMain, subCategoriesString, knowledgeLevel, context]
 
-        base_dir = Path(__file__).parent 
+        base_dir = Path(__file__).parent
         promptPath = base_dir / "prompt.txt"
 
         # we do this to create unique prompts for each instance
