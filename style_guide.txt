@@ -1,0 +1,9 @@
+---------------------------------------------------------------
+#                                                             #
+# Lets try having a style guide so all scripts are consistent #
+#                                                             #
+---------------------------------------------------------------
+
+1. use snake_case for all code segments. such as: variable & function names
+
+2. idk
