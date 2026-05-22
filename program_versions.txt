@@ -1,0 +1,19 @@
+------------------------------------------------------------
+#                                                          #
+# LIST ALL VERSIONS OF SOFTWARE USED FOR THE PROJECT BELOW #
+#                                                          #
+# INCLUDE ANY LIBRARIES AS WELL, AND THE INSTALL COMMANDS  #
+#                                                          #
+------------------------------------------------------------
+
+--- NPM --- (not using npx)
+    vers: 11.15.0
+    cmd: npm install -g npm@11.15.0
+
+--- NODE.JS ---
+    vers: 22.16.0
+
+--- VITE ---
+    vers: 11.15.0
+    install: npm install -g create-vite
+    check: npm vite --version
