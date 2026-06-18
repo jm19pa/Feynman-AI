@@ -5,9 +5,6 @@ function Home_Page() {
     return (
         <>
             <h1>New fAInman website!</h1>
-            <div>
-                <a href='about_us'>About Us</a>
-            </div>
             <div className='temp1'>
                 <h2><u>The web pages we will have:</u></h2>
                 <div className='details'>
