@@ -6,14 +6,21 @@
 #                                                          #
 ------------------------------------------------------------
 
+--- IF NPM RUN DEV ISN'T WORKING ---
+    do: npm install
+
 --- NPM --- (not using npx)
     vers: 11.15.0
     cmd: npm install -g npm@11.15.0
 
 --- NODE.JS ---
     vers: 22.16.0
+    check: node -v
 
 --- VITE ---
     vers: 11.15.0
     install: npm install -g create-vite
     check: npm vite --version
+
+--- ROUTER ---
+    install: npm i react-router-dom
