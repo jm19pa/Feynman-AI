@@ -3,9 +3,15 @@ import { useState } from 'react'
 
 function Chat() {
     return (
-        <div>
+        <>
             <h1>Chat</h1>
-        </div>
+            <form>
+                <label for='send_message'>Send a message</label>
+                <input type='text' id='send_message' name='send_message'/>
+                <input type='submit' value='submit'/>
+            </form>
+            {/* https://github.com/dilidili/react-drawing-board */}
+        </>
     );
 }
 
