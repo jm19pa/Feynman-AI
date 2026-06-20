@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { Tldraw } from 'tldraw'
+import 'tldraw/tldraw.css'
 // import './Chat.css'
 
 function Chat() {
@@ -10,6 +12,9 @@ function Chat() {
                 <input type='text' id='send_message' name='send_message' />
                 <input type='submit' value='submit' />
             </form>
+            <div style={{ inset: 0 , width: '500px', height: '500px'}}>
+                <Tldraw />
+            </div>
             {/* https://www.tldraw.com/ */}
         </>
     );
