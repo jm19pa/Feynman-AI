@@ -16,6 +16,9 @@ function Chat() {
                 <Tldraw />
             </div>
             {/* https://www.tldraw.com/ */}
+            <div id='ai-response-area'>
+                <p>This will be the response area for the AI!</p>
+            </div>
         </>
     );
 }
