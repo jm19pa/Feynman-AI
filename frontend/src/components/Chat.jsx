@@ -12,7 +12,7 @@ function Chat() {
                 <input type='text' id='send_message' name='send_message' />
                 <input type='submit' value='submit' />
             </form>
-            <div style={{ inset: 0 , width: '500px', height: '500px'}}>
+            <div className='drawing-area'  style={{ inset: 0 , width: '500px', height: '500px'}}>
                 <Tldraw />
             </div>
             {/* https://www.tldraw.com/ */}
