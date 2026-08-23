@@ -9,7 +9,7 @@ function Nav_Bar() {
                     <Link to='/' className='NavLink'>
                         Home
                     </Link>
-                    <Link to='/About_Us' className='NavLink'>
+                    <Link to='/About' className='NavLink'>
                         About
                     </Link>
                     <Link to='/Login' className='NavLink'>

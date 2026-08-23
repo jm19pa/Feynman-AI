@@ -11,7 +11,7 @@ import './App.css';
 
 function App() {
     return (
-        <>
+        <div className='transition bg-neutral-900 text-neutral-50 min-h-screen'>
             <BrowserRouter>
                 <Nav_Bar />
                 <Routes>
@@ -23,7 +23,7 @@ function App() {
                     <Route path="/Chat" element={<Chat />} />
                 </Routes>
             </BrowserRouter>
-        </>
+        </div>
     );
 }
 
