@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function Home_Page() {
+function Home() {
     return (
         <>
             <h1>New fAInman website!</h1>
@@ -54,4 +54,4 @@ function Home_Page() {
     );
 }
 
-export default Home_Page;
+export default Home;

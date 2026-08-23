@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function Sign_Up() {
+function SignUp() {
     return (
         <>
             <h1>Sign Up</h1>
@@ -19,4 +19,4 @@ function Sign_Up() {
     );
 }
 
-export default Sign_Up;
+export default SignUp;

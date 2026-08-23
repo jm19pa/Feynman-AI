@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Tldraw } from 'tldraw'
 import 'tldraw/tldraw.css'
-// import './Chat.css'
 
 function Chat() {
     return (

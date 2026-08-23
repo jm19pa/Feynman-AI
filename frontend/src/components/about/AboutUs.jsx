@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function About_Us() {
+function AboutUs() {
     return (
         <>
             <h1>About Us</h1>
@@ -16,4 +16,4 @@ function About_Us() {
     );
 }
 
-export default About_Us;
+export default AboutUs;
