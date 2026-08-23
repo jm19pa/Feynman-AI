@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './forms.css'
 
 function Email_Verification() {
     return (
