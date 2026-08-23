@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import Nav_Bar from './components/header/Nav_Bar';
+import NavBar from './components/header/NavBar';
 import Home_Page from './components/home/Home';
 import About from './components/about/AboutUs';
 import Login from './components/login/Login';
@@ -13,7 +13,7 @@ function App() {
     return (
         <div className='transition bg-neutral-900 text-neutral-50 min-h-screen'>
             <BrowserRouter>
-                <Nav_Bar />
+                <NavBar />
                 <Routes>
                     <Route exact path="/" element={<Home_Page />} />
                     <Route path="/About" element={<About />} />
