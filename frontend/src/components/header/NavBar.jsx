@@ -18,6 +18,9 @@ function NavBar() {
                     <Link to='/Chat' className='text-lg font-semibold'>
                         Chat
                     </Link>
+                    <Link to='/Todo' className='text-lg font-semibold border bg-red-500/50 border-red-400/50 rounded-4xl pl-3 pr-3'>
+                        Todo
+                    </Link>
                     <Link to='/Login' className='text-lg font-semibold border bg-purple-500/25 border-purple-400/25 rounded-4xl pl-3 pr-3'>
                         Login
                     </Link>

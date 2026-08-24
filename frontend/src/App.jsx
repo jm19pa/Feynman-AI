@@ -7,6 +7,7 @@ import Login from './components/login/Login';
 import Sign_Up from './components/signup/SignUp';
 import Email_Verification from './components/email/EmailVer';
 import Chat from './components/chat/Chat';
+import Todo from './components/todo/Todo';
 import './App.css';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                     <Route path="/Sign_Up" element={<Sign_Up />} />
                     <Route path="/Email_Verification" element={<Email_Verification />} />
                     <Route path="/Chat" element={<Chat />} />
+                    <Route path="/Todo" element={<Todo />} />
                 </Routes>
             </BrowserRouter>
         </div>
