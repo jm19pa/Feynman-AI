@@ -12,10 +12,10 @@ function Chat() {
                 <form className='text-md md:text-lg lg:text-xl pt-4 flex flex-col items-center'>
                     <div className='flex flex-col items-center'>
                         <label for='send_message'>Type a message</label>
-                        <input type='text' id='send_message' name='send_message' className='border bg-yellow-500/25 border-yellow-400/25 text-center w-sm rounded-full' />
+                        <input type='text' id='send_message' name='send_message' className='border bg-cyan-500/25 border-cyan-400/25 text-center w-sm rounded-full' />
                     </div>
                     <div className='pt-4'>
-                        <input type='submit' value='Send Message' className='border bg-green-500/25 border-green-400/25 rounded-4xl w-fit pl-4 pr-4' />
+                        <input type='submit' value='Send Message' className='border bg-olive-500/25 border-olive-400/25 rounded-4xl w-fit pl-4 pr-4' />
                     </div>
                 </form>
                 <div className='drawing-area' style={{ inset: 0, width: '500px', height: '500px' }}>
