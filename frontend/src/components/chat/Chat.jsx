@@ -9,22 +9,43 @@ function Chat() {
             {/* This div holds all the content, limiting the width */}
             <div className='flex items-center flex-col lg:w-75vw max-w-7xl m-auto'>
                 <h1 className='text-5xl font-extrabold'>Chat</h1>
-                <form className='text-md md:text-lg lg:text-xl pt-4 flex flex-col items-center'>
-                    <div className='flex flex-col items-center'>
-                        <label for='send_message'>Type a message</label>
-                        <input type='text' id='send_message' name='send_message' className='border bg-cyan-500/25 border-cyan-400/25 text-center w-sm rounded-full' />
+
+                {/* main content area */}
+                <div className='gap-4 p-4 w-full min-h-svh flex flex-row'>
+                    <div className='w-1/2 h-1/2 p-4 aspect-square bg-neutral-50/5 rounded-4xl'>
+                        {/* Messages area */}
+                        <div className='flex flex-col'>
+                            <div className='bg-sky-700/75 border-sky-600/75 border rounded-4xl w-fit max-w-1/2 p-2.5 self-end'>
+                                <p>Short user message</p>
+                            </div>
+                            <div className='bg-mist-700/75 border-mist-600/75 border rounded-4xl w-fit max-w-1/2 p-2.5 self-start'>
+                                <p>AI small text</p>
+                            </div>
+                            <div className='bg-sky-700/75 border-sky-600/75 border rounded-4xl w-fit max-w-1/2 p-2.5 self-end'>
+                                <p>This is an extremely long message sent by a user, this could be long paragraphs of words or whatever. Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, est dolorum quas a nobis sint corporis, praesentium earum excepturi voluptates, maxime sequi ad dignissimos minima reiciendis eveniet amet rerum officia.</p>
+                            </div>
+                            <div className='bg-mist-700/75 border-mist-600/75 border rounded-4xl w-fit max-w-1/2 p-2.5 self-start'>
+                                <p>The AI has responded with a pretty long message, we need to make sure this can be displayed. Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, est dolorum quas a nobis sint corporis, praesentium earum excepturi voluptates, maxime sequi ad dignissimos minima reiciendis eveniet amet rerum officia.</p>
+                            </div>
+                        </div>
+
+                        {/* Sending a message */}
+                        <div className='w-full border bg-gray-500/75 border-gray-400/75 rounded-4xl mt-4 p-3 flex flex-row'>
+                            <div className='flex flex-col items-center w-10/12'>
+                                <input type='text' id='send_message' name='send_message' placeholder='Send message here' className='h-full w-full' />
+                            </div>
+                            <div className='w-2/12'>
+                                <input type='submit' value='Submit' className='w-full'/>
+                            </div>
+                        </div>
                     </div>
-                    <div className='pt-4'>
-                        <input type='submit' value='Send Message' className='border bg-olive-500/25 border-olive-400/25 rounded-4xl w-fit pl-4 pr-4' />
+
+                    {/* drawing area */}
+                    <div className='flex items-center justify-center w-1/2 h-1/2 aspect-square'>
+                        <Tldraw />
                     </div>
-                </form>
-                <div className='drawing-area' style={{ inset: 0, width: '500px', height: '500px' }}>
-                    <Tldraw />
                 </div>
-                {/* https://www.tldraw.com/ */}
-                <div id='ai-response-area'>
-                    <p>This will be the response area for the AI!</p>
-                </div>
+
             </div>
         </section>
     );
