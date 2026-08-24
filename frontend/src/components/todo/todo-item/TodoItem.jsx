@@ -1,7 +1,7 @@
-function TodoItem({ title, goals, todo }) {
+function TodoItem({ title, goals, todo, color }) {
 
     return (
-        <div className='border bg-purple-500/25 border-purple-400/25 rounded-4xl flex flex-col items-center w-md hover:scale-110 transition'>
+        <div className={`border bg-${color}-500/25 border-${color}-400/25 rounded-4xl flex flex-col items-center w-md hover:scale-110 transition`}>
             <h3 className='text-3xl font-semibold'>{title}</h3>
 
             <h4 className='text-xl font-light opacity-65 underline text-left w-full pl-6'>Goals</h4>

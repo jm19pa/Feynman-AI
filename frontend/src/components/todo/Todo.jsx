@@ -16,36 +16,42 @@ function Todo() {
                         title={'Home Page'}
                         goals={['Description of application', 'Project exigence', 'Demo video']}
                         todo={['Styling', 'Write exigence', 'Create description', 'Record video']}
+                        color={'sky'}
                     />
 
                     <TodoItem
                         title={'Login'}
                         goals={['Username & Password', 'Forgot password']}
-                        todo={['Styling', 'Database to store users']}
+                        todo={['Styling', 'Password changing']}
+                        color={'purple'}
                     />
 
                     <TodoItem
                         title={'Signup'}
-                        goals={['Username, Password, Confirm Password, Email', 'Forgot password']}
-                        todo={[]}
+                        goals={['Username, Password, Confirm Password, Email', 'Strong passwords', 'Unique users']}
+                        todo={['Database to store users', 'Move to email ver.', 'Check existing user', 'Check used email', 'Password strength']}
+                        color={'orange'}
                     />
 
                     <TodoItem
                         title={'Email Verification Page'}
                         goals={['6 digit confirmation', 'Re-send code']}
                         todo={[]}
+                        color={'emerald'}
                     />
 
                     <TodoItem
                         title={'About Us'}
                         goals={['Description of all of those who worked on the project']}
                         todo={[]}
+                        color={'red'}
                     />
 
                     <TodoItem
                         title={'Chat'}
                         goals={['Question & Response', 'Save chat history', 'Multiple conversations', 'Send images', 'Compress images', 'Draw, color, fill, erase, brush sizes']}
                         todo={[]}
+                        color={'yellow'}
                     />
                 </div>
             </div>
