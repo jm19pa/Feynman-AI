@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 function AboutUs() {
     return (
-        <section id='AboutUs' className='p-4 lg:p-0 lg:pb-6 min-h-svh bg-neutral-50/1'>
+        <section id='AboutUs' className='p-4 lg:p-0 lg:pb-6 lg:pt-6 min-h-svh bg-neutral-50/1'>
             {/* This div holds all the content, limiting the width */}
             <div className='flex items-center flex-col lg:w-75vw max-w-7xl m-auto'>
                 <h1 className='text-5xl font-extrabold'>About Us</h1>
